@@ -1,5 +1,5 @@
-import { forkJoin, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { combineLatest, fromEvent, forkJoin, Observable, of } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
 import { Address, User } from './model';
 
 const users: User[] = [
@@ -67,4 +67,18 @@ address$ = users$.pipe(
 // Subscription
 address$.subscribe((address: Address[]) => {
   console.log('address', address); // Prints the array of addresses: Address[]
+});
+
+// 1. Define multiple observables
+let color = of('Black', 'Red', 'Blue');
+let brand = of('Jaguar', 'Ford', 'BMW');
+let model = of('manual','automatic');
+let price = of(100, 200, 300);
+
+// 2. Call combineLatest operator, inject multiple observables in array
+const joinStream = combineLatest( brand, price, model, color);
+
+// 3. Subscibe combineLatest observable
+const subscribe = joinStream.subscribe((latestItem) => {
+  console.log(latestItem);
 });
